@@ -1,0 +1,39 @@
+name: Generate Architecture Diagrams
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/*.mmd'
+      - '.github/workflows/diagrams.yml'
+
+jobs:
+  build-diagrams:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Mermaid CLI
+        run: |
+          npm install -g @mermaid-js/mermaid-cli
+
+      - name: Generate PNGs from Mermaid
+        run: |
+          mkdir -p docs/png
+          for f in docs/*.mmd; do
+            filename=$(basename "$f" .mmd)
+            mmdc -i "docs/$filename.mmd" -o "docs/png/$filename.png"
+          done
+
+      - name: Commit diagrams
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update architecture diagrams"
+          file_pattern: docs/png/*.png
+

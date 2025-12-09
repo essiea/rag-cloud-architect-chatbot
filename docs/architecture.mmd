@@ -1,0 +1,8 @@
+flowchart TD
+    S3[S3 Docs Bucket] --> ING[Ingest Lambda]
+    ING --> DDB[(DynamoDB Vector Store)]
+    QL[Query Lambda] --> DDB
+    QL --> B[Bedrock Claude 3 Sonnet]
+    API[API Gateway] --> QL
+    USER[User/Web UI] --> API
+
