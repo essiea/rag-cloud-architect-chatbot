@@ -1,8 +1,15 @@
 flowchart TD
-    S3[S3 Docs Bucket] --> ING[Ingest Lambda]
-    ING --> DDB[(DynamoDB Vector Store)]
-    QL[Query Lambda] --> DDB
-    QL --> B[Bedrock Claude 3 Sonnet]
-    API[API Gateway] --> QL
-    USER[User/Web UI] --> API
+    S3["S3 Docs Bucket"]
+    ING["Ingest Lambda"]
+    DDB["DynamoDB Vector Store"]
+    QL["Query Lambda"]
+    B["Amazon Bedrock - Claude 3 Sonnet"]
+    API["HTTP API Gateway"]
+    USER["User or Web UI"]
 
+    S3 --> ING
+    ING --> DDB
+    QL --> DDB
+    QL --> B
+    API --> QL
+    USER --> API
